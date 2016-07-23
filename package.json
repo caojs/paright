@@ -1,0 +1,35 @@
+{
+  "name": "paright",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "ava",
+    "build": "webpack index.js dist/paright.js --output-library paright --output-library-target umd"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/caojs/right-parameters.git"
+  },
+  "author": "caojs <caoo.dai@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/caojs/right-parameters/issues"
+  },
+  "homepage": "https://github.com/caojs/right-parameters#readme",
+  "devDependencies": {
+    "ava": "0.15.2",
+    "rewire": "2.5.2"
+  },
+  "ava": {
+    "files": [
+      "test/*.js"
+    ],
+    "concurrency": 5,
+    "failFast": true,
+    "tap": true,
+    "require": [
+      "babel-register"
+    ]
+  }
+}
