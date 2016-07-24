@@ -3,11 +3,9 @@ function atoa(args) {
 }
 
 function type(a) {
-  return Array.isArray(a) ?
-    'array' :
-    a === null ?
-      'null' :
-      typeof a;
+  if (a !== a) { return 'nan'; }
+  if (a === null) { return 'null'; }
+  return Array.isArray(a) ? 'array' : typeof a;
 }
 
 function parsePattern(params) {

@@ -6,6 +6,7 @@ var type = paright.__get__('type');
 var pp = paright.__get__('parsePattern');
 
 test('type function', t => {
+  t.is(type(NaN), 'nan');
   t.is(type(true), 'boolean');
   t.is(type(1), 'number');
   t.is(type(''), 'string');
