@@ -59,11 +59,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	function type(a) {
-	  return Array.isArray(a) ?
-	    'array' :
-	    a === null ?
-	      'null' :
-	      typeof a;
+	  if (a !== a) { return 'nan'; }
+	  if (a === null) { return 'null'; }
+	  return Array.isArray(a) ? 'array' : typeof a;
 	}
 
 	function parsePattern(params) {
@@ -90,17 +88,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return true;
 	}
 
-	var noop = {
-	  hasPattern: function() { return noop; },
-	  test: function() {}
-	};
+	function noop() {}
 
 	function paright(params) {
 	  var args = atoa(params);
 	  var o = {
 	    hasPattern: function() {
-	      return validate(args, parsePattern(arguments)) ?
-	        noop : o;
+	      var valid = validate(args, parsePattern(arguments));
+	      if (valid) {
+	        o.hasPattern = function() { return o; }
+	        o.test = noop;
+	      }
+	      return o;
 	    },
 
 	    test: function() {

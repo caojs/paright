@@ -1,6 +1,6 @@
 {
   "name": "paright",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Simple arguments validation.",
   "main": "index.js",
   "scripts": {
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/caojs/right-parameters.git"
+    "url": "git+https://github.com/caojs/paright.git"
   },
   "author": "caojs <caoo.dai@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/caojs/right-parameters/issues"
+    "url": "https://github.com/caojs/paright/issues"
   },
-  "homepage": "https://github.com/caojs/right-parameters#readme",
+  "homepage": "https://github.com/caojs/paright#readme",
   "devDependencies": {
     "ava": "0.15.2",
     "rewire": "2.5.2"

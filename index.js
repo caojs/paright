@@ -32,17 +32,18 @@ function validate(args, pattern) {
   return true;
 }
 
-var noop = {
-  hasPattern: function() { return noop; },
-  test: function() {}
-};
+function noop() {}
 
 function paright(params) {
   var args = atoa(params);
   var o = {
     hasPattern: function() {
-      return validate(args, parsePattern(arguments)) ?
-        noop : o;
+      var valid = validate(args, parsePattern(arguments));
+      if (valid) {
+        o.hasPattern = function() { return o; }
+        o.test = noop;
+      }
+      return o;
     },
 
     test: function() {
