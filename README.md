@@ -43,6 +43,7 @@ params
   .hasPattern('boolean|number')
   .test();
 ```
+You can also extract arguments use `extract` method.
 
 ## Types:
 ```
@@ -50,6 +51,7 @@ string
 number
 boolean
 object
+function
 array
 null
 nan

@@ -32,22 +32,44 @@ function validate(args, pattern) {
   return true;
 }
 
-function noop() {}
-
 function paright(params) {
   var args = atoa(params);
+  var matched = false;
+  var extractor = {};
   var o = {
     hasPattern: function() {
-      var valid = validate(args, parsePattern(arguments));
-      if (valid) {
-        o.hasPattern = function() { return o; }
-        o.test = noop;
+      if (!matched) {
+        matched = validate(args, parsePattern(arguments));
+      }
+      return o;
+    },
+
+    extract: function() {
+      if (matched) {
+        atoa(arguments)
+          .map(function(value, index) {
+            return type(value) === 'array' ?
+              value :
+              [value, void 0];
+          })
+          .forEach(function(value, index) {
+            var key = value[0];
+            var dft = value[1];
+            extractor[key] = type(args[index]) !== 'undefined' ?
+              args[index] :
+              dft;
+          });
+
+        o.extract = function() { return o; }
       }
       return o;
     },
 
     test: function() {
-      throw Error('Parameters don\'t match with patterns!');
+      if (!matched) {
+        throw Error('Parameters don\'t match with patterns!');
+      }
+      return extractor;
     }
   };
 
