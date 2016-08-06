@@ -54,6 +54,10 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports) {
 
+	function isArray(a) {
+	  return {}.toString.call(a) === '[object Array]';
+	}
+
 	function atoa(args) {
 	  return [].slice.call(args);
 	}
@@ -61,7 +65,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function type(a) {
 	  if (a !== a) { return 'nan'; }
 	  if (a === null) { return 'null'; }
-	  return Array.isArray(a) ? 'array' : typeof a;
+	  return isArray(a) ? 'array' : typeof a;
 	}
 
 	function parsePattern(params) {
@@ -77,33 +81,52 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  for (var i = args.length - 1; i >= 0; i--) {
-	    var tp = type(args[i]);
-	    var valid = pattern[i]
-	      .some(function(p) {
-	        return p === tp;
-	      });
+	    var typ = type(args[i]);
+	    var valid = ~pattern[i].indexOf(typ);
 	    if (!valid) { return false; }
 	  }
 
 	  return true;
 	}
 
-	function noop() {}
-
 	function paright(params) {
 	  var args = atoa(params);
+	  var matched = false;
+	  var extractor = {};
 	  var o = {
 	    hasPattern: function() {
-	      var valid = validate(args, parsePattern(arguments));
-	      if (valid) {
-	        o.hasPattern = function() { return o; }
-	        o.test = noop;
+	      if (!matched) {
+	        matched = validate(args, parsePattern(arguments));
+	      }
+	      return o;
+	    },
+
+	    extract: function() {
+	      if (matched) {
+	        atoa(arguments)
+	          .map(function(value) {
+	            return type(value) === 'array' ?
+	              value :
+	              [value, void 0];
+	          })
+	          .forEach(function(value, index) {
+	            var key = value[0];
+	            var dft = value[1];
+	            extractor[key] = type(args[index]) !== 'undefined' ?
+	              args[index] :
+	              dft;
+	          });
+
+	        o.extract = function() { return o; }
 	      }
 	      return o;
 	    },
 
 	    test: function() {
-	      throw Error('Parameters don\'t match with patterns!');
+	      if (!matched) {
+	        throw Error('Parameters don\'t match with patterns!');
+	      }
+	      return extractor;
 	    }
 	  };
 

@@ -1,3 +1,7 @@
+function isArray(a) {
+  return {}.toString.call(a) === '[object Array]';
+}
+
 function atoa(args) {
   return [].slice.call(args);
 }
@@ -5,7 +9,7 @@ function atoa(args) {
 function type(a) {
   if (a !== a) { return 'nan'; }
   if (a === null) { return 'null'; }
-  return Array.isArray(a) ? 'array' : typeof a;
+  return isArray(a) ? 'array' : typeof a;
 }
 
 function parsePattern(params) {
@@ -21,11 +25,8 @@ function validate(args, pattern) {
   }
 
   for (var i = args.length - 1; i >= 0; i--) {
-    var tp = type(args[i]);
-    var valid = pattern[i]
-      .some(function(p) {
-        return p === tp;
-      });
+    var typ = type(args[i]);
+    var valid = ~pattern[i].indexOf(typ);
     if (!valid) { return false; }
   }
 
@@ -47,7 +48,7 @@ function paright(params) {
     extract: function() {
       if (matched) {
         atoa(arguments)
-          .map(function(value, index) {
+          .map(function(value) {
             return type(value) === 'array' ?
               value :
               [value, void 0];
